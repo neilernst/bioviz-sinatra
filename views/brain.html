@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+    <title>Load Brain XML</title>
+    <script type="text/javascript" src="processing-0.9.1.js"></script>
+    <script type="text/javascript" src="init.js"></script>
+  </head>
+  <body>
+    <h1><a href="toxml.xml">Brains!</a></h1>
+<!--	if you need it once, you can simply load it into a javascript var, using the technique described on http://www.w3schools.com/xml/xml_parser.asp
+	and then addressing that variable in your processing.js script.
+	however, if you need to load it in response to something during the sketch's lifetime, you may need to get a little more creative (at least until 0.9.4 when external hooking is hopefully back in, and you can load and xml element the way w3cschools outlines, then directly handing it off to the sketch) -->
+	<script type="text/javascript">
+	if (window.XMLHttpRequest)
+	  {
+	  xhttp=new XMLHttpRequest();
+	  }
+	xhttp.open("GET","toxml.xml",false);
+		xhttp.send();
+		
+	xmlDoc=xhttp.responseXML;
+
+	txt = xmlDoc.getElementsByTagName("known_gene_symbol").nodeValue;
+	document.write(txt);
+
+	</script>
+	
+    <script type="application/processing"> 
+
+	// All Examples Written by Casey Reas and Ben Fry
+	// unless otherwise stated.
+	int rectX, rectY;      // Position of square button
+	int circleX, circleY;  // Position of circle button
+	int rectSize = 50;     // Diameter of rect
+	int circleSize = 53;   // Diameter of circle
+
+	color rectColor;
+	color circleColor;
+	color baseColor;
+
+	boolean rectOver = false;
+	boolean circleOver = false;
+	
+	
+
+	void setup()
+	{
+	  size(200, 200);
+	  smooth();
+	  rectColor = color(0);
+	  circleColor = color(255);
+	  baseColor = color(102);
+	  circleX = width/2+circleSize/2+10;
+	  circleY = height/2;
+	  rectX = width/2-rectSize-10;
+	  rectY = height/2-rectSize/2;
+	  ellipseMode(CENTER);
+	}
+
+	void draw()
+	{
+	  update(mouseX, mouseY);
+
+	  noStroke();
+	  if (rectOver) {
+	    background(rectColor);
+	  } else if (circleOver) {
+	    background(circleColor);
+	  } else {
+	    background(baseColor);
+	  }
+
+	  stroke(255);
+	  fill(rectColor);
+	  rect(rectX, rectY, rectSize, rectSize);
+	  stroke(0);
+	  fill(circleColor);
+	  ellipse(circleX, circleY, circleSize, circleSize);
+	}
+
+	void update(int x, int y)
+	{
+	  if( overCircle(circleX, circleY, circleSize) ) {
+	    circleOver = true;
+	    rectOver = false;
+	  } else if ( overRect(rectX, rectY, rectSize, rectSize) ) {
+	    rectOver = true;
+	    circleOver = false;
+	  } else {
+	    circleOver = rectOver = false;
+	  }
+	}
+
+	boolean overRect(int x, int y, int width, int height) 
+	{
+	  if (mouseX >= x && mouseX <= x+width && 
+	      mouseY >= y && mouseY <= y+height) {
+	    return true;
+	  } else {
+	    return false;
+	  }
+	}
+
+	boolean overCircle(int x, int y, int diameter) 
+	{
+	  float disX = x - mouseX;
+	  float disY = y - mouseY;
+	  if(sqrt(sq(disX) + sq(disY)) < diameter/2 ) {
+	    return true;
+	  } else {
+	    return false;
+	  }
+	}
+	</script>
+	
+   	<canvas></canvas>
+
+  </body>
+</html>

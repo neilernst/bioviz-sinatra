@@ -1,0 +1,36 @@
+!!! 5
+%html{:lang=>"en"}
+	%head
+		%meta{:charset=>"utf-8"}
+		%title Test Jquery and Processing
+		%script{:type => "text/javascript", :src  => "processing-0.9.1.js"}
+		%script{:type => "text/javascript", :src  => "http://code.jquery.com/jquery-1.4.2.js"}
+		%script{:type => "text/javascript", :src  => "init.js"}
+		%script{:type => "text/javascript", :src  => "js/jquery-ui-1.8.2.custom.min.js"}
+		%link{:href => "css/smoothness/jquery-ui-1.8.2.custom.css", :rel => "Stylesheet", :type => "text/css"}
+
+	%body
+		.example
+			:javascript
+				$(function() {
+					$("#slider").slider({
+					value:120,
+					min: 2,
+					max: 160,
+					step: 2,
+					slide: function(event, ui) {
+						$("#amount").val('$' + ui.value);
+						}
+					});
+					$("#amount").val('$' + $("#slider").slider("value"));
+				});
+			.graph
+				%script{:type => "application/processing"}
+					= test_script	
+				%canvas{:id => "p-canvas", :width => "372", :height => "180"}
+			.controller
+				.demo
+					%label{:for => "amount"} Donation goal for 2010 50$ increments
+					%input{:type => "text", :id => "amount"}
+				.slider
+		%span

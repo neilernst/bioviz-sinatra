@@ -1,0 +1,33 @@
+/ if you need it once, you can simply load it into a javascript var, using the technique described on http://www.w3schools.com/xml/xml_parser.asp and then addressing that variable in your processing.js script. 	however, if you need to load it in response to something during the sketch's lifetime, you may need to get a little more creative (at least until 0.9.4 when external hooking is hopefully back in, and you can load and xml element the way w3cschools outlines, then directly handing it off to the sketch) 
+
+:javascript
+	if (window.XMLHttpRequest)
+	{
+		xhttp=new XMLHttpRequest();
+	}
+	xhttp.open("GET","toxml.xml",false);
+	xhttp.send();
+
+	xmlDoc=xhttp.responseXML;
+	txt = xmlDoc.getElementsByTagName("known_gene_symbol")[0]//.nodeValue;
+	document.write(txt);
+	
+Query:
+- we want a list of expression levels for each region for a particular gene in a given experiment
+
+for each experiment
+	for each gene with a sample in that experiment
+		for each region
+			print mean_expression_leve
+			
+Data model
+Gene has many samples
+Gene has many experiments
+Gene has many regions
+Experiment has many samples
+Experiment has many genes
+Region has many samples
+Region has many genes
+Sample has one region
+Sample has one gene
+Sample has one experiment

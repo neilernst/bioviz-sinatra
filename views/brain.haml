@@ -1,0 +1,39 @@
+!!! 5
+%html{:lang=>"en"}
+	%head
+		%meta{:charset=>"utf-8"}
+		%title Load Brain XML
+		%script{:type => "text/javascript", :src  => "processing-0.9.1.js"}
+		%script{:type => "text/javascript", :src  => "init.js"}
+		%script{:type => "text/javascript", :src => "http://code.jquery.com/jquery-1.4.2.js"}
+
+	%body
+		%a{:href => "toxml.xml"}Brains!
+		
+		:javascript
+			if (window.XMLHttpRequest)
+			{
+				xhttp=new XMLHttpRequest();
+			}
+			xhttp.open("GET","toxml.xml",false);
+			xhttp.send();
+
+			xmlDoc=xhttp.responseXML;
+			txt = xmlDoc.getElementsByTagName("known_gene_symbol")[0]//.nodeValue;
+			var nsResolver = xmlDoc.createNSResolver( xmlDoc.ownerDocument == null ? xmlDoc.documentElement : xmlDoc.ownerDocument.documentElement);  
+			var iterator = xmlDoc.evaluate('//known_gene_symbol', xmlDoc, nsResolver, XPathResult.ANY_TYPE, null );
+			try {  
+			  var thisNode = iterator.iterateNext();  
+			  while (thisNode) {  
+			    document.write( thisNode.textContent );  
+			    thisNode = iterator.iterateNext();  
+			  }   
+			}  
+			catch (e) {  
+			  dump( 'Error: Document tree modified during iteration ' + e );  
+			}
+		
+		%script{:type => "application/processing"}
+			= processing_script	
+
+		%canvas
