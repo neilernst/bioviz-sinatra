@@ -13,3 +13,5 @@ gem "haml"
 gem "tilt"
 gem "fastthread"
 gem "activesupport"
+gem "builder"
+
